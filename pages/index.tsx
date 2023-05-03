@@ -63,7 +63,7 @@ const Home = (props: HomeProps) => {
   //이미지 클릭시 실행되는 함수
   const handleImageClick = () => {
     if (fileRef.current) {
-      fileRef.current.value = "";
+      fileRef.current.value = '';
     }
     setImageSrc("");
   };
