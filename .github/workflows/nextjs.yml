@@ -7,7 +7,8 @@ name: dot-display
 # action 트리거 조건 (release 브랜치에 푸쉬될 때)
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 # action 동작
 jobs:
