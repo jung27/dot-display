@@ -65,7 +65,7 @@ const Home = (props: HomeProps) => {
     if (fileRef.current) {
       fileRef.current.value = '';
     }
-    setImageSrc("");
+    setImageSrc('');
   };
 
   //이미지가 변경되었을 때 실행되는 함수
