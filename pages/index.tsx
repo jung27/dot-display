@@ -47,7 +47,9 @@ const Home = (props: HomeProps) => {
 
   //rgba to int
   const rgbaToInt = (r: number, g: number, b: number, a: number) => {
-    return (r << 24) | (g << 16) | (b << 8) | a;
+    return (
+      ((r & 0xff) << 24) | ((g & 0xff) << 16) | ((b & 0xff) << 8) | (a & 0xff)
+    );
   };
 
   //이미지 파일이 변경되었을 때 실행되는 함수
@@ -93,7 +95,7 @@ const Home = (props: HomeProps) => {
               pixelData[1],
               pixelData[2],
               pixelData[3]
-            )})}}`;
+            )}}`;
             commands.push(command);
           }
         }
