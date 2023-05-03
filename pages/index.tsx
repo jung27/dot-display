@@ -48,7 +48,7 @@ const Home = (props: HomeProps) => {
   //rgba to int
   const rgbaToInt = (r: number, g: number, b: number, a: number) => {
     return (
-      ((r & 0xff) << 16) | ((g & 0xff) << 8) | ((b & 0xff) << 8) | ((a & 0xff) << 24)
+      ((r & 0xff) << 16) | ((g & 0xff) << 8) | (b & 0xff) | ((a & 0xff) << 24)
     );
   };
 
@@ -88,9 +88,9 @@ const Home = (props: HomeProps) => {
             const pixelData = ctx.getImageData(j, i, 1, 1).data;
 
             if (pixelData[3] === 0) continue;
-            const command = `summon text_display ~${j * 0.5} ~ ~${
-              i * 0.5
-            } {text_opacity:10,transformation:{left_rotation:[-0.7f,0f,0f,0.7f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[1f,1f,1f]},text:'{"text":"|||||"}',background:${rgbaToInt(
+            const command = `summon text_display ~ ~ ~ {text_opacity:10,transformation:{left_rotation:[-0.7f,0f,0f,0.7f],right_rotation:[0f,0f,0f,1f],translation:[${j * 0.269}f,0f,${
+              i * 0.269
+            }f],scale:[1f,1f,1f]},text:'{"text":"|||||"}',background:${rgbaToInt(
               pixelData[0],
               pixelData[1],
               pixelData[2],
