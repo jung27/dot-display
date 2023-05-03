@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 interface HomeProps {
   // Define any props here
@@ -14,12 +14,14 @@ const Home = (props: HomeProps) => {
     }
   };
 
-  const downloadMcfunction = () => {
+  const downloadMcfunction = async () => {
     const element = document.createElement("a");
-    const commands = getCommands();
+    const commands = await getCommands();
     const file = new Blob([commands.join("\n")], { type: "text/plain" });
     element.href = URL.createObjectURL(file);
-    element.download = "myFile.txt";
+    element.download = `${
+      fileRef.current?.files && fileRef.current?.files[0].name.split(".")[0]
+    }.mcfunction`;
     document.body.appendChild(element);
     element.click();
   };
@@ -66,39 +68,38 @@ const Home = (props: HomeProps) => {
 
   //이미지가 변경되었을 때 실행되는 함수
   const getCommands = () => {
-    const commands: string[] = [];
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    const img = new Image();
-    img.src = imageSrc;
+    return new Promise<string[]>((resolve) => {
+      const commands: string[] = [];
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      const img = new Image();
+      img.src = imageSrc;
 
-    img.onload = function () {
-      if (!ctx) return; // optional chaining operator 적용
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0);
+      img.onload = function () {
+        if (!ctx) return;
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
 
-      for (let i = 0; i < img.width; i += 1) {
-        for (let j = 0; j < img.height; j += 1) {
-          // (x,y) 좌표에 있는 픽셀의 RGB 값을 가져옴.
-          const pixelData = ctx.getImageData(j, i, 1, 1).data;
+        for (let i = 0; i < img.width; i += 1) {
+          for (let j = 0; j < img.height; j += 1) {
+            const pixelData = ctx.getImageData(j, i, 1, 1).data;
 
-          if (pixelData[3] === 0) continue;
-          const command = `summon text_display ~${j * 0.5} ~ ~${
-            i * 0.5
-          } {text_opacity:10,transformation:{left_rotation:[-0.7f,0f,0f,0.7f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[1f,1f,1f]},text:'{"text":"|||||"}',background:${rgbaToInt(
-            pixelData[0],
-            pixelData[1],
-            pixelData[2],
-            pixelData[3]
-          )})}}`;
-          commands.push(command);
+            if (pixelData[3] === 0) continue;
+            const command = `summon text_display ~${j * 0.5} ~ ~${
+              i * 0.5
+            } {text_opacity:10,transformation:{left_rotation:[-0.7f,0f,0f,0.7f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[1f,1f,1f]},text:'{"text":"|||||"}',background:${rgbaToInt(
+              pixelData[0],
+              pixelData[1],
+              pixelData[2],
+              pixelData[3]
+            )})}}`;
+            commands.push(command);
+          }
         }
-      }
-    };
-    console.log(commands);
-    console.log(commands.length);
-    return commands;
+        resolve(commands);
+      };
+    });
   };
 
   return (
