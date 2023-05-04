@@ -1,4 +1,4 @@
-import ImageUpload from "@/components/ImageProcessor";
+import ImageProcessor from "@/components/ImageProcessor";
 
 export default function Home() {
   return (
@@ -6,7 +6,7 @@ export default function Home() {
       <h1 className="text-center text-5xl mt-10 text-white font-bold">
         Dot Display
       </h1>
-      <ImageUpload />
+      <ImageProcessor />
     </div>
   );
 }
